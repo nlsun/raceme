@@ -90,8 +90,12 @@ func main() {
 			log.Printf("burn (%v) error: %s", burnCmd.Args, err)
 		}
 	}()
-
 	if err := targetCmd.Run(); err != nil {
-		log.Printf("target (%v) error: %s", targetCmd.Args, err)
+		switch err.(type) {
+		case *exec.ExitError:
+			os.Exit(1)
+		default:
+			log.Printf("target (%v) error: %s", targetCmd.Args, err)
+		}
 	}
 }
